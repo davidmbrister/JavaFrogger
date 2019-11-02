@@ -1,3 +1,4 @@
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
@@ -19,8 +20,7 @@ public class Frog extends Sprite  {
 	}
 
 	public Frog() {
-		super(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP, "frogAlive.png",50,50);
-		
+		super(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP, "frogAlive.png",50,50);	
 	}
 	
 	public JLabel getFrogLabel() {

@@ -8,7 +8,6 @@ public class Car extends Sprite implements Runnable {
 	//variable speed to be determined through constructor because I will have two types of cars
 	private float speed;
 	private Thread t;
-	//does the car need to know about anything 
 	//it needs to control value of the frog, and a frog label
 	private JLabel FrogLabel, CarLabel;
 	private Frog frog;
@@ -49,7 +48,7 @@ public class Car extends Sprite implements Runnable {
 	public void run() {
 		
 		
-		while(frog.isFrogAlive()) { // method to determine if the frog is alive
+		while(Main.getFrogLives() > 0) { // method to determine if the frog is alive
 						
 			int tX = this.spriteX; // tX = tetrominoeX
 			
@@ -69,9 +68,7 @@ public class Car extends Sprite implements Runnable {
 			//System.out.println(rCar.toString()); //PROBLEM
 			//no y,w,or h???
 			
-			
-			
-			
+				
 			if (rCar.intersects(rFrog) || rFrog.intersects(rCar)) {
 				
 				System.out.println("Crash!");
@@ -82,18 +79,15 @@ public class Car extends Sprite implements Runnable {
 				frog.setSpriteName("frogDead.png");
 				FrogLabel.setIcon( new ImageIcon(getClass().getResource(frog.getSpriteName() ) ));
 				
-				//decrement lives
-				int currentLives = Main.getFrogLives() -1;
-				Main.setFrogLives(currentLives);
-				System.out.println(Main.getFrogLives());
+				//CarLabel.repaint();
 				
-				try {
-					Thread.sleep(500);
+				rFrog.setRect(0, 0, 0, 0);
+			
+				
+				
 					FrogLabel.setVisible(false);
 					
-				} catch (Exception e) {
 					
-				}
 				
 				
 			}

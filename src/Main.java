@@ -39,6 +39,16 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		frogLives = Lives;
 	}
 	
+	public void getNewFrog() {
+		for(Car car : cars) {
+			car.setFrog(frog);
+			car.setFrogLabel(frogLabel);
+			
+			
+		}
+	}
+		
+	
 	public void restart() {
 		frog = new Frog();
 		frogLabel = new JLabel();
@@ -53,7 +63,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		
 		frogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
 		content.add(frogLabel);
+		frogLabel.repaint();
 			
+		
 	}
 
 	
@@ -159,14 +171,16 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		
 		if (!frog.isFrogAlive() && e.getKeyCode() == KeyEvent.VK_SPACE) {
 			System.out.println("hey");
-			try {
-				Thread.sleep(500);
-			} catch (Exception SMH) {
-				
-			}
+		
+			//decrement lives
+			int currentLives = Main.getFrogLives() -1;
+			Main.setFrogLives(currentLives);
+			System.out.println(Main.getFrogLives());
 			restart();
+			getNewFrog();
 			
-			frogLabel.repaint();
+			
+			
 		} else {
 		frog.moveFrog(e);
 		}
