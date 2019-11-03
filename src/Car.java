@@ -50,7 +50,7 @@ public class Car extends Sprite implements Runnable {
 		
 		while(Main.getFrogLives() > 0) { // method to determine if the frog is alive
 						
-			int tX = this.spriteX; // tX = tetrominoeX
+			int tX = this.spriteX; 
 			
 			
 			tX += speed; //the only thing that will vary unless I want to create another car class
@@ -72,28 +72,18 @@ public class Car extends Sprite implements Runnable {
 			if (rCar.intersects(rFrog) || rFrog.intersects(rCar)) {
 				
 				System.out.println("Crash!");
-				frog.setFrogAlive(false); //break cycle
-				
-				//end of cycle cleanup up/mutations
-				//change frog label
-				frog.setSpriteName("frogDead.png");
-				FrogLabel.setIcon( new ImageIcon(getClass().getResource(frog.getSpriteName() ) ));
-				
-				//CarLabel.repaint();
-				
-				rFrog.setRect(0, 0, 0, 0);
-			
-				
-				
-					FrogLabel.setVisible(false);
+				frog.setFrogAlive(false); 
 					
-					
-				
-				
+				frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
+				FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+				rFrog = frog.getRectangle();
+				Main.setFrogLives(Main.getFrogLives()-1);
+				System.out.println(Main.getFrogLives());
+				frog.setFrogAlive(true); 
 			}
 			
 			try {
-				Thread.sleep(10);
+				Thread.sleep(20);
 			} catch (Exception e) {
 				
 			}

@@ -4,13 +4,20 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public class Frog extends Sprite  {
+public class Frog extends Sprite {
 
 	private JLabel FrogLabel;
 	private boolean isFrogAlive = true;
+	private boolean attached = false; //initially the frog is no where close to being attached to a log
+	private Thread t;
 	
 	
-
+    public boolean isFrogAttached() {
+    	return attached;
+    }
+    public void setFrogAttached(boolean attachedOrNot) {
+    	this.attached = attachedOrNot;
+    }
 	public boolean isFrogAlive() {
 		return isFrogAlive;
 	}
@@ -31,6 +38,11 @@ public class Frog extends Sprite  {
 		this.FrogLabel = frogLabel;
 	}
 	
+	public void setFrogCoords(int x, int y) {
+		this.spriteX = x;
+		this.spriteY = y;
+		r = new Rectangle(spriteX,spriteY,spriteW,spriteH);
+	}
 	
 	
 	public void moveFrog(KeyEvent e) {
@@ -54,7 +66,7 @@ public class Frog extends Sprite  {
 					frogY -= GameProperties.FROG_STEP;
 					if (frogY < 0 ) {
 						frogY = 0;
-					}
+					} //SOME CODE TO TRIGGER WIN CONDITION
 					
 				} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					
@@ -84,4 +96,6 @@ public class Frog extends Sprite  {
 				
 			}
 	}
+
+	
 }

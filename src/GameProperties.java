@@ -9,15 +9,15 @@ final public static int BOARD_WIDTH = 500;
 final public static int TRACK = BOARD_HEIGHT/8;
 
 //implement Track constants -- this constitutes my layout of one column and 8 rows
-final public static int TRACK_EIGHT_HEIGHT = BOARD_HEIGHT/8; //50 px
-final public static int TRACK_SEVEN_HEIGHT = (BOARD_HEIGHT/8)*2; //100 px
+final public static int TRACK_EIGHT_BASE = BOARD_HEIGHT/8; //50 px
+final public static int TRACK_SEVEN_BASE = (BOARD_HEIGHT/8)*2; //100 px
 
-final public static int TRACK_SIX_HEIGHT = (BOARD_HEIGHT/8)*3; //150 px
-final public static int TRACK_FIVE_HEIGHT = (BOARD_HEIGHT/8)*4;
-final public static int TRACK_FOUR_HEIGHT = (BOARD_HEIGHT/8)*5;
-final public static int TRACK_THREE_HEIGHT = (BOARD_HEIGHT/8)*6;
-final public static int TRACK_TWO_HEIGHT = (BOARD_HEIGHT/8)*7;
-final public static int TRACK_ONE_HEIGHT = (BOARD_HEIGHT/8)*8;
+final public static int TRACK_SIX_BASE = (BOARD_HEIGHT/8)*3; //150 px
+final public static int TRACK_FIVE_BASE = (BOARD_HEIGHT/8)*4; //200
+final public static int TRACK_FOUR_BASE = (BOARD_HEIGHT/8)*5;
+final public static int TRACK_THREE_BASE = (BOARD_HEIGHT/8)*6;
+final public static int TRACK_TWO_BASE = (BOARD_HEIGHT/8)*7;
+final public static int TRACK_ONE_BASE = (BOARD_HEIGHT/8)*8;
 
 
 }

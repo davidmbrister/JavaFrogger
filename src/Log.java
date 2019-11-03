@@ -10,7 +10,7 @@ import javax.swing.JLabel;
  *
  * */
  
-public class Log extends Car implements Runnable{
+public class Log extends Sprite implements Runnable{
 	//CLASS MEMBERS
 		//variable speed to be determined through constructor because I will have two types of cars
 		private float speed;
@@ -19,7 +19,7 @@ public class Log extends Car implements Runnable{
 		private Frog frog;
 		
 		public Log() {
-			super(0, 0, 1, "pinkCar.png", 80, 50);
+			super(0, 0, "log1.png", 80, 50);
 		}
 		public Log(int x, int y, float s, String name, int w, int h) {
 			this.spriteX = x;
@@ -41,8 +41,59 @@ public class Log extends Car implements Runnable{
 			System.out.println("X,Y: " + spriteX + ", " + spriteY + "," + "Speed: " + speed);
 		}
 		
-		public void startCar() {
+		public void startLog() {
 			thread = new Thread(this, "Car");
 			thread.start();
 		}
+		@Override
+		public void run() {
+			
+			while(Main.getFrogLives() > 0) {
+				int tX = this.spriteX;
+				
+				tX += speed;
+				if (tX > 0 && tX > GameProperties.BOARD_WIDTH + this.spriteW) {
+				     tX = -this.spriteW;
+				    } else if (speed < 0 && tX < 0 - this.spriteW ) {
+				      tX = GameProperties.BOARD_WIDTH + spriteW;
+				    }
+				 this.setSpriteX(tX);
+				 LogLabel.setLocation(this.spriteX, this.spriteY);
+				 //check if frogtangle is in bounds
+				 Rectangle rFrog = frog.getRectangle();
+				 Rectangle rLog= this.r;
+				 
+				 if ((frog.getSpriteY() > GameProperties.TRACK_FIVE_BASE && frog.getSpriteY() < GameProperties.TRACK_SEVEN_BASE) && rLog.intersects(rFrog) || rFrog.intersects(rLog)) {
+						
+						System.out.println("On it!");
+										
+						frog.setFrogCoords(this.getSpriteX(),this.getSpriteY()); //quickly update frog coords with log coords
+						FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+						
+						//if Frog is greater than or less than board with, kick him back within board bounds
+					
+				 }
+				 
+				 try {
+						Thread.sleep(20);
+					} catch (Exception e) {
+						
+						}
+			}
+			
+		}
+		public void setFrogLabel(JLabel frogLabel) {
+			FrogLabel = frogLabel;
+		}
+		
+
+		public void setLogLabel(JLabel logLabel) {
+			LogLabel = logLabel;
+		}
+
+		
+		public void setFrog(Frog frog) {
+			this.frog = frog;
+		}
+		
 }
