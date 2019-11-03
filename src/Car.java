@@ -5,14 +5,12 @@ import javax.swing.JLabel;
 
 public class Car extends Sprite implements Runnable {
 	//CLASS MEMBERS
-	//variable speed to be determined through constructor because I will have two types of cars
-	private float speed;
-	private Thread t;
-	//it needs to control value of the frog, and a frog label
+	private float speed; //variable speed to be determined through constructor because I will have two types of cars
+	private Thread t; //it needs to control value of the frog, and a frog label
 	private JLabel FrogLabel, CarLabel;
 	private Frog frog;
 	
-	//CONSTRUCTOR
+	//CONSTRUCTORS
 	public Car() {
 		super(0, 0, "pinkCar.png", 80, 50);
 		

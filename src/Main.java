@@ -35,13 +35,8 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	
 	//Game Global variables that concern different levels
 	public static int frogLives = 3;
-	public static int levelsComplete = 0;
-	//level colors
-	public static Color levelOneColor = Color.darkGray;
-	public static Color levelTwoColor = Color.gray;
-	public static Color levelThreeColor = Color.yellow;
-	
-	//private Log logs[];
+	public static int level = 0;
+
 	
 	
 	public static int getFrogLives() {
@@ -92,6 +87,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		//add content pane
 		content = getContentPane();
 		//FROG SETUP
+		
 		frog = new Frog();
 		frogLabel = new JLabel();
 		roadLabel = new JLabel();
@@ -247,6 +243,8 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	public static void main(String[] args) {
 		Main newGame = new Main();
 		newGame.setVisible(true);
+		
+		//if Level increases, dispose of old frame and make a new game
 
 	}
 
@@ -265,6 +263,8 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		System.out.println(frog.getSpriteY());
 		if (frog.getSpriteY() == 0) {
 			System.out.println("you won");
+			level++;
+			
 			//enact win condition code by playing with static variables or ending game and displaying statss
 		}
 		if (frog.getSpriteY() <= GameProperties.TRACK_SEVEN_BASE && frog.getSpriteY() >= GameProperties.TRACK_EIGHT_BASE){ 
@@ -278,20 +278,21 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			 			
 			 		}
 			 }
-			 		if (!frog.isFrogAttached()) {
-			 		System.out.println("Splash!");
-			 		frog.setFrogAttached(false);
-			 		frog.setFrogAlive(false); 
-			 		
-			 		frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
-			 		frogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
-			 		
-			 		Main.setFrogLives(Main.getFrogLives()-1);
-			 		System.out.println(Main.getFrogLives());
-			 		frog.setFrogAlive(true); 
-			 		}
+	 		if (!frog.isFrogAttached()) {
+	 		System.out.println("Splash!");
+	 		frog.setFrogAttached(false);
+	 		frog.setFrogAlive(false); 
+	 		
+	 		frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
+	 		frogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+	 		
+	 		Main.setFrogLives(Main.getFrogLives()-1);
+	 		System.out.println(Main.getFrogLives());
+	 		frog.setFrogAlive(true); 
+	 		}
+	 	
 			 
-		   }
+		   }	
 		
 	}
 
