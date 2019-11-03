@@ -35,7 +35,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	
 	//Game Global variables that concern different levels
 	public static int frogLives = 3;
-	public static int level = 0;
+	public static int level = 1;
 
 	
 	
@@ -114,9 +114,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		// for loops to instantiate multiples cars
 		spriteIndex = 0;
 
-		cars = new Car[6]; 	//however many cars I end up having will go here
+		cars = new Car[level*6]; 	//however many cars I end up having will go here
 		int spriteChooser = 0;
-		for(int i = 0; i < 3; i ++) {
+		for(int i = 0; i < level*3; i ++) {
 			int x  = (i + 1) * 200;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_TWO_BASE - GameProperties.TRACK, 3, "pinkCar.png", 80, 50);
 			carLabel = new JLabel();
@@ -143,7 +143,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			spriteChooser++;
 		}
 		spriteChooser = 0;
-		for(int i = 0; i < 3; i ++) {
+		for(int i = 0; i < level*3; i ++) {
 			int x  = i * 200 + 50;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_THREE_BASE - GameProperties.TRACK, -7, "greenCar.png", 80, 50);
 			carLabel = new JLabel();
@@ -172,9 +172,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		//Initiate logs
 		spriteIndex = 0;
 
-		logs = new Log[5];
+		logs = new Log[level*5];
 		
-		for(int i = 0; i < 3; i ++) {
+		for(int i = 0; i < level*3; i ++) {
 			
 			int x  = i * 200 + 30;
 			logs[spriteIndex] = new Log(x, GameProperties.TRACK_SIX_BASE - GameProperties.TRACK, -7, "log1.png", 50, 50);
@@ -189,15 +189,12 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			logs[spriteIndex].startLog();
 			content.add(logLabel);
 			
-			//DEGBUG
-			System.out.println(frog.isFrogAlive()); //prints true...PASS
-			System.out.println(logLabel.getLocation()); //it's the correct coords. PASS
 			spriteIndex++;
 			
 		}
 		
 		
-		for(int i = 0; i < 2; i ++) {
+		for(int i = 0; i < level*2; i ++) {
 			int x  = i * 200 + 30;
 			logs[spriteIndex] = new Log(x, GameProperties.TRACK_SEVEN_BASE - GameProperties.TRACK, 9, "log2.png", 90, 50);
 			logLabel = new JLabel();
@@ -209,9 +206,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			logLabel.setSize(logs[spriteIndex].getSpriteW(), logs[spriteIndex].getSpriteH());
 			logLabel.setLocation(logs[spriteIndex].getSpriteX(), logs[spriteIndex].getSpriteY());
 			logs[spriteIndex].startLog();
-			content.add(logLabel);
-			
-			
+			content.add(logLabel);	
 			
 			spriteIndex++;
 		}
@@ -219,13 +214,13 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		//road graphic
 		roadImage = new ImageIcon(getClass().getResource("road.jpg"));
 		roadLabel.setIcon(roadImage);
-		roadLabel.setSize(500,200);
+		roadLabel.setSize(600,200);
 		roadLabel.setLocation(0,200);
 		add(roadLabel);
 		//water graphic
 		waterImage = new ImageIcon(getClass().getResource("water.png"));
 		waterLabel.setIcon(waterImage);
-		waterLabel.setSize(500,100);
+		waterLabel.setSize(600,100);
 		waterLabel.setLocation(0,50);
 		add(waterLabel);
 		
@@ -245,7 +240,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		newGame.setVisible(true);
 		
 		//if Level increases, dispose of old frame and make a new game
-
+		
 	}
 
 	@Override
@@ -264,6 +259,12 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		if (frog.getSpriteY() == 0) {
 			System.out.println("you won");
 			level++;
+			System.out.println(level);
+			System.out.println("true");
+			
+			Main levelTwoGame = new Main();
+			levelTwoGame.setVisible(true);
+			
 			
 			//enact win condition code by playing with static variables or ending game and displaying statss
 		}
