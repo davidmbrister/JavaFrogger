@@ -46,7 +46,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	private ImageIcon logImage;
 	
 	//labels to store image icons
-	private JLabel frogLabel, carLabel, logLabel, roadLabel, waterLabel, timeLabel, levelLabel, scoreLabel, frogLivesLabel,frogLivesHeaderLabel;
+	private JLabel frogLabel, carLabel, logLabel, roadLabel, waterLabel, timeLabel, levelLabel, scoreLabel, finalScoreLabel, frogLivesLabel, frogLivesHeaderLabel;
 	//screen container
 	private Container content;
 	
@@ -403,16 +403,21 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			//WIN CONDITION MET
 			if (level == 4) {
 				scoreLabel.setVisible(false);
-				scoreLabel = new JLabel("Score: " + score);
-				scoreLabel.setSize(100,50);
-				scoreLabel.setLocation(GameProperties.BOARD_WIDTH - 100, 7);
-				scoreLabel.setFont(new Font("Serif", Font.BOLD, 18));
-				scoreLabel.setForeground(Color.white);
-				add(scoreLabel);
+				
 				levelLabel.setText("Game Complete!");
-				JOptionPane.showMessageDialog(null,"<html><body>Game complete! Congratulations! <br> Total time taken so far: " + (60 - totalGameTime) + " seconds. <br> Your Score is: " + score + "</body></html>");
+				//Game completion bonus of frogLives*5
+				score += (frogLives*5);
+				finalScoreLabel = new JLabel("Score: " + score);
+				finalScoreLabel.setSize(100,50);
+				finalScoreLabel.setLocation(GameProperties.BOARD_WIDTH - 100, 7);
+				finalScoreLabel.setFont(new Font("Serif", Font.BOLD, 18));
+				finalScoreLabel.setForeground(Color.white);
+				finalScoreLabel.setVisible(true);
+				add(finalScoreLabel);
+				JOptionPane.showMessageDialog(null,"<html><body>Game complete! Congratulations! <br> Total time taken so far: " + (60 - totalGameTime) + " seconds. <br> Your Score is: " + score  + "</body></html>");
 				name = JOptionPane.showInputDialog("Enter Your Name!");
 				ConnectToDatabase();
+				System.exit(getDefaultCloseOperation());
 			}
 		
 		}
