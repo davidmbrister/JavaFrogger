@@ -6,13 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.Timer;
-
 //DATABASE IMPORTS
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -20,6 +13,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener, KeyListener {
@@ -51,7 +50,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	//screen container
 	private Container content;
 	
-	//Game Global variables that concern different levels
+	//Game Global variables that concern different levels -- maybe should go in GameProps
 	public static int totalGameTime = 0;
 	public static int score = 0;
 	public static int frogLives = 3;
@@ -66,73 +65,70 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		frogLives = Lives;
 	}
 	
+//	public void getNewFrog() {
+//		for(Car car : cars) {
+//		car.setFrog(frog);
+//		}
+//		for (Log log : logs) {
+//		log.setFrog(frog);
+//		}
+//	}
+	
 	public void restart() {
 		
-		frog.setFrogLabel(frogLabel);
-		
-		frogLabel.setIcon(frogImage);
-		frogLabel.setSize(frog.getSpriteW(), frog.getSpriteH());
-		
+		//set location to starting point
+		frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
 		frogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
-		content.add(frogLabel);
 		frogLabel.repaint();
 		frog.setFrogAlive(true);
+		//should I decrease lives here?
+		//continue refactoring this; maybe lives have to decrease, maybe timer needs reset etc.
 		
 	}
 
 	
 	public Main() {
-		/*
-		 * way to add sprite
-		  1 create and store local object 
-		  2 create and set class-native label for object type
-		   
-		  3 instantiate an icon image from this.SpriteName declared in object constructor
-		   
-		  4 object.setLabel
-		  5 objectLabel.setIcon with icon image
-		  6 objectLabel.setSize of component with object's declared or constructed sprite dimensions
-		  7 objectLabel.setLocation
-		  8 add(objectLabel) to parent 
-		 * */
-		//add content pane
+		
 		content = getContentPane();
 		
 		
 		
-		timer = new Timer(10, this);
-		timer.start();
+	
 		//FROG SETUP
 		
 		frog = new Frog();
 		frogLabel = new JLabel();
 		roadLabel = new JLabel();
 		waterLabel = new JLabel();
+		
+		frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
 		frogImage = new ImageIcon(getClass().getResource(frog.getSpriteName()) );
+		frogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+		frogLabel.repaint();
+		frog.setFrogAlive(true);
+		frog.setFrogLabel(frogLabel);
+		
+		frogLabel.setIcon(frogImage);
+		frogLabel.setSize(frog.getSpriteW(), frog.getSpriteH());
+		add(frogLabel);
 		
 		restart();//configure frog in starting location
 		
 		
 		setSize(GameProperties.BOARD_WIDTH, GameProperties.BOARD_HEIGHT_WITH_TOP_BAR);
 		setLayout(null);
-		
-		
-		//setResizable(false);
+		setResizable(false);
 		
 		setLocationRelativeTo(null);
 		content.setBackground(Color.darkGray);
-		
-		//set road
-		
-		 
-		
+	
 		//CARS SETUP
 		// for loops to instantiate multiples cars
 		spriteIndex = 0;
 		
-		cars = new Car[level*9]; 	
+		cars = new Car[level*8]; 	
 		int spriteChooser = 0;
-		//ROW 1
+		//OBSTACLE ROW 1
 		for(int i = 0; i < level*2 - 1; i++) {
 			int x  = i * 200; // 0 * 200 = 0->80; 1 * 200 = 200->280; 2 * 200 = 400->480; 3 * 200 = 600->680;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_2_BASE - GameProperties.TRACK, -3, "orangeCar.png", 80, 50);
@@ -159,7 +155,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			spriteIndex++;
 			spriteChooser++;
 		}
-		//ROW 2
+		//OBSTACLE ROW 2
 		for(int i = 0; i < 1; i ++) {
 			int x  = (i + 1) * 200;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_3_BASE - GameProperties.TRACK, level*4, "orangeCar.png", 80, 50);
@@ -184,9 +180,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			spriteIndex++;
 			spriteChooser++;
 		}
-		//ROW 3
+		//OBSTACLE ROW 3
 		for(int i = 0; i < level*3; i ++) {
-			int x  = (i + 1) * 200;
+			int x  = i * 200;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_4_BASE - GameProperties.TRACK, 3, "pinkCar.png", 80, 50);
 			carLabel = new JLabel();
 			carLabel.setFocusable(false);
@@ -212,8 +208,8 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			spriteChooser++;
 		}
 		spriteChooser = 0;
-		//ROW 4
-		for(int i = 0; i < level*2; i ++) {
+		//OBSTACLE ROW 4
+		for(int i = 0; i < level*1; i ++) {
 			int x  = i * 200 + 50;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_5_BASE - GameProperties.TRACK, -7, "greenCar.png", 80, 50);
 			carLabel = new JLabel();
@@ -243,7 +239,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		spriteIndex = 0;
 		logs = new Log[9];
 		
-		//ROW 5
+		//OBSTACLE ROW 5
 		for(int i = 0; i < 4; i ++) {
 			int x  = i * 200 + 30;
 			logs[spriteIndex] = new Log(x, GameProperties.TRACK_7_BASE - GameProperties.TRACK, level*4 - 1, "log2.png", 90, 50);
@@ -261,7 +257,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			spriteIndex++;
 		}
 		
-		//ROW 6
+		//OBSTACLE ROW 6
 		for(int i = 0; i < 3; i ++) {
 			
 			int x  = i * 200 + 30;
@@ -281,7 +277,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			
 		}
 		
-		//ROW 7
+		//OBSTACLE ROW 7
 		for(int i = 0; i < 2; i ++) {
 			int x  = i * 200 + 30;
 			logs[spriteIndex] = new Log(x, GameProperties.TRACK_9_BASE - GameProperties.TRACK, level*2 - 1, "log2.png", 90, 50);
@@ -329,10 +325,14 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		
 		scoreLabel = new JLabel("Score: " + score);
 		scoreLabel.setSize(100,50);
-		scoreLabel.setLocation(GameProperties.BOARD_WIDTH - 100, 15);
+		scoreLabel.setLocation(GameProperties.BOARD_WIDTH - 100, 7);
 		scoreLabel.setFont(new Font("Serif", Font.BOLD, 18));
 		scoreLabel.setForeground(Color.white);
 		add(scoreLabel);
+		
+		//TIMER NEEDS ACCESS TO EVERYTHING, I THINK
+		timer = new Timer(10, this);
+		timer.start();
 		
 		content.addKeyListener(this);
 		content.setFocusable(true);
@@ -350,20 +350,18 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-
-		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-		frog.setFrogAttached(false);//assume this is false
+		frog.setFrogAttached(false);//assume this is false 
 	
 		frog.moveFrog(e);
 		System.out.println(frog.getSpriteY());
 		if (frog.getSpriteY() == 0) {
 			totalGameTime += time;
-			score += totalGameTime;
+			score = totalGameTime;
 			JOptionPane.showMessageDialog(null, "<html><body>Level complete! <br> Total score so far: " + score + "</body></html>");
 			level++;
 			
@@ -385,32 +383,38 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			}
 		
 		}
+		int logsIntersected = 0;
 		if (frog.getSpriteY() <= GameProperties.TRACK_8_BASE && frog.getSpriteY() >= GameProperties.TRACK_10_BASE){ 
 			 System.out.println("in the blue");	
 			 for (Log log : logs) {
 				 	
-			 		Rectangle rFrog = frog.getRectangle();
-					Rectangle rLog= log.r;
-			 		if (rFrog.intersects(rLog)){
-			 			frog.setFrogAttached(true);
-			 			
-			 		}
-			 }
-	 		if (!frog.isFrogAttached()) {
-	 		System.out.println("Splash!");
-	 		frog.setFrogAttached(false);
-	 		frog.setFrogAlive(false); 
+		 		Rectangle rFrog = frog.getRectangle();
+				Rectangle rLog= log.r;
+				System.out.println(frog.isFrogAttached() + "AM I on log");
+		 		if (rFrog.intersects(rLog)){
+		 			System.out.println("I'm on a log");
+		 			frog.setFrogAttached(true);
+		 			
+		 			logsIntersected++;
 	 		
-	 		frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
-	 		frogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
-	 		
-	 		Main.setFrogLives(Main.getFrogLives()-1);
-	 		System.out.println(Main.getFrogLives());
-	 		frog.setFrogAlive(true); 
-	 		}
-	 	
-			 
-		   }	
+		 		}		
+			 } 
+			 if (logsIntersected == 0) {
+					System.out.println("I'm NOT on a log");
+					frog.setFrogAttached(false);
+					System.out.println(frog.isFrogAttached() + "NOT on log");
+					
+					System.out.println("Splash!");
+					frog.setFrogAlive(false); 
+					
+					restart();
+					
+					Main.setFrogLives(Main.getFrogLives()-1);
+					System.out.println(Main.getFrogLives());
+					frog.setFrogAlive(true); 
+				}
+		} 
+		
 		
 	}
 
@@ -422,19 +426,29 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		System.out.println(gameTimer);
+		if (!frog.isFrogAttached() && frog.getSpriteY() > GameProperties.TRACK_8_BASE && frog.getSpriteY() < GameProperties.TRACK_7_BASE) {
+			
+			System.out.println("Splash!");
+			frog.setFrogAlive(false); 
+			
+			restart();
+			
+			Main.setFrogLives(Main.getFrogLives()-1);
+			System.out.println(Main.getFrogLives());
+			frog.setFrogAlive(true); 
+		}
+
 		gameTimer += 1;
 		
+		
 		if (gameTimer == 100) {
-			System.out.println("hi");
+	
 			time--;
 			timeLabel.setText(String.valueOf(time));;
 			gameTimer = 0;
-		}
-		
-		if (frogLives == 0) {
 			
 		}
+			
 	    
 		if (frog.getSpriteY() == 0) {
 			timer.stop();
@@ -461,11 +475,12 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			name = JOptionPane.showInputDialog("Enter Your Name!");
 			// put name and score in DB, show DB results
 			ConnectToDatabase();
+			
 		}
 
 	}
 	public void ConnectToDatabase() {
-		System.out.println("hey");
+		
 		
 		try {
 			//load the DB driver
@@ -507,6 +522,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 				System.out.println("The current data is => ");
 				DisplayRecords(rs);
 				rs.close();
+				conn.close();
 				
 			} else {
 				System.out.println("Cannot establish connection");
@@ -521,7 +537,6 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		} finally {
 			//cleanup
 		}
-	
 
 	}
 	

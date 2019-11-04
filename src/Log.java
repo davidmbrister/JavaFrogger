@@ -66,12 +66,49 @@ public class Log extends Sprite implements Runnable{
 				 if ((frog.getSpriteY() > GameProperties.TRACK_8_BASE && frog.getSpriteY() < GameProperties.TRACK_7_BASE) && rLog.intersects(rFrog) || rFrog.intersects(rLog)) {
 						
 						System.out.println("On it!");
-										
+						
+						// THIS IS NOT WHAT HAPPENS IN THE ACTUAL GAME
 						frog.setFrogCoords(this.getSpriteX(),this.getSpriteY()); //quickly update frog coords with log coords
 						FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
 						
-						//if Frog is greater than or less than board with, kick him back within board bounds
-					
+						//if Frog the are intersecting and frog is greater than or less than board with, kick him back within board bounds
+						if(frog.getSpriteX() < 0) {
+							if (tX == -this.spriteW + 7) {
+								frog.setFrogAttached(false);	
+								
+								System.out.println("Splash!");
+								frog.setFrogAlive(false); 
+								
+								frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
+								FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+								
+								Main.setFrogLives(Main.getFrogLives()-1);
+								System.out.println(Main.getFrogLives());
+								frog.setFrogAlive(true); 
+							} else {
+							frog.setSpriteX(0);
+							FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+							}
+						}
+						if(frog.getSpriteX() > GameProperties.BOARD_WIDTH) {
+							if (tX > GameProperties.BOARD_WIDTH) {
+								System.out.println("hey");
+								frog.setFrogAttached(false);	
+								
+								System.out.println("Splash!");
+								frog.setFrogAlive(false); 
+								
+								frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
+								FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+								
+								Main.setFrogLives(Main.getFrogLives()-1);
+								System.out.println(Main.getFrogLives());
+								frog.setFrogAlive(true); 
+							} else {
+							frog.setSpriteX(GameProperties.BOARD_WIDTH - GameProperties.FROG_STEP);
+							FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+							}
+						}
 				 }
 				 
 				 try {
