@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 public class Log extends Sprite implements Runnable{
 	//CLASS MEMBERS
 		//variable speed to be determined through constructor because I will have two types of cars
-		private float speed;
+		private int speed;
 		private Thread thread;
 		private JLabel FrogLabel, LogLabel;
 		private Frog frog;
@@ -21,7 +21,7 @@ public class Log extends Sprite implements Runnable{
 		public Log() {
 			super(0, 0, "log1.png", 80, 50);
 		}
-		public Log(int x, int y, float s, String name, int w, int h) {
+		public Log(int x, int y, int s, String name, int w, int h) {
 			this.spriteX = x;
 			this.spriteY = y;
 			this.speed = s;
@@ -33,7 +33,7 @@ public class Log extends Sprite implements Runnable{
 		public float getSpeed() {
 			return speed;
 		}
-		public void setSpeed(float speed) {
+		public void setSpeed(int speed) {
 			this.speed = speed;
 		}
 		
@@ -68,14 +68,19 @@ public class Log extends Sprite implements Runnable{
 						System.out.println("On it!");
 						
 						// THIS IS NOT WHAT HAPPENS IN THE ACTUAL GAME
-						frog.setFrogCoords(this.getSpriteX(),this.getSpriteY()); //quickly update frog coords with log coords
+						System.out.println(frog.isFrogAttached() + " 1PM ");
+						frog.setSpriteX(frog.getSpriteX() + speed);
+						//quickly update frog coords with log coords
 						FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+						frog.setFrogAttached(true);
 						
 						//if Frog the are intersecting and frog is greater than or less than board with, kick him back within board bounds
 						if(frog.getSpriteX() < 0) {
 							if (tX == -this.spriteW + 7) {
 								frog.setFrogAttached(false);	
 								
+								
+								//REFACTOR
 								System.out.println("Splash!");
 								frog.setFrogAlive(false); 
 								
@@ -84,53 +89,53 @@ public class Log extends Sprite implements Runnable{
 								
 								Main.setFrogLives(Main.getFrogLives()-1);
 								System.out.println(Main.getFrogLives());
+								
 								frog.setFrogAlive(true); 
 							} else {
 							frog.setSpriteX(0);
 							FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
 							}
 						}
-						if(frog.getSpriteX() > GameProperties.BOARD_WIDTH) {
-							if (tX > GameProperties.BOARD_WIDTH) {
-								System.out.println("hey");
-								frog.setFrogAttached(false);	
-								
-								System.out.println("Splash!");
-								frog.setFrogAlive(false); 
-								
-								frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
+						if(frog.getSpriteX() + GameProperties.FROG_STEP > GameProperties.BOARD_WIDTH) {
+								if (tX > GameProperties.BOARD_WIDTH - 7) {
+									System.out.println("hey");
+									frog.setFrogAttached(false);	
+									
+									System.out.println("Splash!");
+									frog.setFrogAlive(false); 
+									
+									frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
+									FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+									
+									Main.setFrogLives(Main.getFrogLives()-1);
+									System.out.println(Main.getFrogLives());
+									frog.setFrogAlive(true); 
+								} else {
+									System.out.println("offScreenRight");
+								frog.setSpriteX(GameProperties.BOARD_WIDTH - GameProperties.FROG_STEP);
 								FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
-								
-								Main.setFrogLives(Main.getFrogLives()-1);
-								System.out.println(Main.getFrogLives());
-								frog.setFrogAlive(true); 
-							} else {
-							frog.setSpriteX(GameProperties.BOARD_WIDTH - GameProperties.FROG_STEP);
-							FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
-							}
+								}
 						}
 				 }
 				 
 				 try {
-						Thread.sleep(20);
-					} catch (Exception e) {
+					   Thread.sleep(20);
+					 } catch (Exception e) {
 						
 						}
 			}
 			
 		}
+		
 		public void setFrogLabel(JLabel frogLabel) {
 			FrogLabel = frogLabel;
-		}
-		
+		}		
 
 		public void setLogLabel(JLabel logLabel) {
 			LogLabel = logLabel;
 		}
 
-		
 		public void setFrog(Frog frog) {
 			this.frog = frog;
-		}
-		
+		}		
 }

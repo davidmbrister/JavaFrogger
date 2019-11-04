@@ -46,7 +46,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	private ImageIcon logImage;
 	
 	//labels to store image icons
-	private JLabel frogLabel, carLabel, logLabel, roadLabel, waterLabel, timeLabel, levelLabel, scoreLabel;
+	private JLabel frogLabel, carLabel, logLabel, roadLabel, waterLabel, timeLabel, levelLabel, scoreLabel, frogLivesLabel,frogLivesHeaderLabel;
 	//screen container
 	private Container content;
 	
@@ -81,6 +81,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		frogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
 		frogLabel.repaint();
 		frog.setFrogAlive(true);
+		
 		//should I decrease lives here?
 		//continue refactoring this; maybe lives have to decrease, maybe timer needs reset etc.
 		
@@ -125,12 +126,15 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		//CARS SETUP
 		// for loops to instantiate multiples cars
 		spriteIndex = 0;
-		
-		cars = new Car[level*8]; 	
+		int obstacleNum = level;
+		if (obstacleNum == 3) {
+			obstacleNum--;
+		}
+		cars = new Car[obstacleNum*7]; 	
 		int spriteChooser = 0;
 		//OBSTACLE ROW 1
-		for(int i = 0; i < level*2 - 1; i++) {
-			int x  = i * 200; // 0 * 200 = 0->80; 1 * 200 = 200->280; 2 * 200 = 400->480; 3 * 200 = 600->680;
+		for(int i = 0; i < obstacleNum*2 - 1; i++) {
+			int x  = i * 185; // 0 * 200 = 0->80; 1 * 200 = 200->280; 2 * 200 = 400->480; 3 * 200 = 600->680;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_2_BASE - GameProperties.TRACK, -3, "orangeCar.png", 80, 50);
 			carLabel = new JLabel();
 			carLabel.setFocusable(false);
@@ -158,7 +162,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		//OBSTACLE ROW 2
 		for(int i = 0; i < 1; i ++) {
 			int x  = (i + 1) * 200;
-			cars[spriteIndex] = new Car(x, GameProperties.TRACK_3_BASE - GameProperties.TRACK, level*4, "orangeCar.png", 80, 50);
+			cars[spriteIndex] = new Car(x, GameProperties.TRACK_3_BASE - GameProperties.TRACK, obstacleNum*4, "orangeCar.png", 80, 50);
 			carLabel = new JLabel();
 			carLabel.setFocusable(false);
 			cars[spriteIndex].setFrog(frog);
@@ -181,9 +185,12 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			spriteChooser++;
 		}
 		//OBSTACLE ROW 3
-		for(int i = 0; i < level*3; i ++) {
-			int x  = i * 200;
+		for(int i = 0; i < obstacleNum*2; i ++) {
+			int x  = i * 190;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_4_BASE - GameProperties.TRACK, 3, "pinkCar.png", 80, 50);
+			if (level == 3) {
+				cars[spriteIndex].setSpeed(6);
+			}
 			carLabel = new JLabel();
 			carLabel.setFocusable(false);
 			cars[spriteIndex].setFrog(frog);
@@ -209,7 +216,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		}
 		spriteChooser = 0;
 		//OBSTACLE ROW 4
-		for(int i = 0; i < level*1; i ++) {
+		for(int i = 0; i < obstacleNum*1; i ++) {
 			int x  = i * 200 + 50;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_5_BASE - GameProperties.TRACK, -7, "greenCar.png", 80, 50);
 			carLabel = new JLabel();
@@ -242,7 +249,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		//OBSTACLE ROW 5
 		for(int i = 0; i < 4; i ++) {
 			int x  = i * 200 + 30;
-			logs[spriteIndex] = new Log(x, GameProperties.TRACK_7_BASE - GameProperties.TRACK, level*4 - 1, "log2.png", 90, 50);
+			logs[spriteIndex] = new Log(x, GameProperties.TRACK_7_BASE - GameProperties.TRACK, obstacleNum*4 - 1, "log2.png", 90, 50);
 			logLabel = new JLabel();
 			logs[spriteIndex].setFrog(frog);
 			logs[spriteIndex].setFrogLabel(frogLabel);
@@ -261,7 +268,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		for(int i = 0; i < 3; i ++) {
 			
 			int x  = i * 200 + 30;
-			logs[spriteIndex] = new Log(x, GameProperties.TRACK_8_BASE - GameProperties.TRACK, level*-4 + 1, "log1.png", 50, 50);
+			logs[spriteIndex] = new Log(x, GameProperties.TRACK_8_BASE - GameProperties.TRACK, obstacleNum*-4 + 1, "log1.png", 50, 50);
 			logLabel = new JLabel();
 			logs[spriteIndex].setFrog(frog);
 			logs[spriteIndex].setFrogLabel(frogLabel);
@@ -280,7 +287,10 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		//OBSTACLE ROW 7
 		for(int i = 0; i < 2; i ++) {
 			int x  = i * 200 + 30;
-			logs[spriteIndex] = new Log(x, GameProperties.TRACK_9_BASE - GameProperties.TRACK, level*2 - 1, "log2.png", 90, 50);
+			logs[spriteIndex] = new Log(x, GameProperties.TRACK_9_BASE - GameProperties.TRACK, obstacleNum*2 - 1, "log2.png", 90, 50);
+			if (level == 3) {
+				logs[spriteIndex].setSpeed(2);
+			}
 			logLabel = new JLabel();
 			logs[spriteIndex].setFrog(frog);
 			logs[spriteIndex].setFrogLabel(frogLabel);
@@ -317,7 +327,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		add(timeLabel);
 		
 		levelLabel = new JLabel("Level " + level);
-		levelLabel.setSize(100,50);
+		levelLabel.setSize(150,50);
 		levelLabel.setLocation(GameProperties.BOARD_WIDTH/2 - 50, 7);
 		levelLabel.setFont(new Font("Serif", Font.BOLD, 18));
 		levelLabel.setForeground(Color.white);
@@ -329,6 +339,20 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		scoreLabel.setFont(new Font("Serif", Font.BOLD, 18));
 		scoreLabel.setForeground(Color.white);
 		add(scoreLabel);
+		
+		frogLivesHeaderLabel = new JLabel("Lives Left: ");
+		frogLivesHeaderLabel.setSize(100,50);
+		frogLivesHeaderLabel.setLocation(GameProperties.BOARD_WIDTH - 100, GameProperties.BOARD_HEIGHT - 43);
+		frogLivesHeaderLabel.setFont(new Font("Serif", Font.BOLD, 18));
+		frogLivesHeaderLabel.setForeground(Color.white);
+		add(frogLivesHeaderLabel);
+		
+		frogLivesLabel = new JLabel(String.valueOf(frogLives));
+		frogLivesLabel.setSize(100,50);
+		frogLivesLabel.setLocation(GameProperties.BOARD_WIDTH - 12, GameProperties.BOARD_HEIGHT - 43);
+		frogLivesLabel.setFont(new Font("Serif", Font.BOLD, 18));
+		frogLivesLabel.setForeground(Color.white);
+		add(frogLivesLabel);
 		
 		//TIMER NEEDS ACCESS TO EVERYTHING, I THINK
 		timer = new Timer(10, this);
@@ -378,7 +402,16 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			}
 			//WIN CONDITION MET
 			if (level == 4) {
+				scoreLabel.setVisible(false);
+				scoreLabel = new JLabel("Score: " + score);
+				scoreLabel.setSize(100,50);
+				scoreLabel.setLocation(GameProperties.BOARD_WIDTH - 100, 7);
+				scoreLabel.setFont(new Font("Serif", Font.BOLD, 18));
+				scoreLabel.setForeground(Color.white);
+				add(scoreLabel);
+				levelLabel.setText("Game Complete!");
 				JOptionPane.showMessageDialog(null,"<html><body>Game complete! Congratulations! <br> Total time taken so far: " + (60 - totalGameTime) + " seconds. <br> Your Score is: " + score + "</body></html>");
+				name = JOptionPane.showInputDialog("Enter Your Name!");
 				ConnectToDatabase();
 			}
 		
@@ -444,8 +477,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		if (gameTimer == 100) {
 	
 			time--;
-			timeLabel.setText(String.valueOf(time));;
+			timeLabel.setText(String.valueOf(time));
 			gameTimer = 0;
+			frogLivesLabel.setText(String.valueOf(frogLives));;
 			
 		}
 			

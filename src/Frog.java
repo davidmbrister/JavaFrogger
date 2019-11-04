@@ -17,17 +17,22 @@ public class Frog extends Sprite {
     }
     public void setFrogAttached(boolean attachedOrNot) {
     	this.attached = attachedOrNot;
+    	if(attachedOrNot) {
+    		
+    	}
     }
+    
 	public boolean isFrogAlive() {
 		return isFrogAlive;
 	}
 
-	public void setFrogAlive(boolean isFrogAlive) {
-		this.isFrogAlive = isFrogAlive;
+	public void setFrogAlive(boolean bool) {
+		this.isFrogAlive = bool;
 	}
 
 	public Frog() {
-		super(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP, "frogAlive.png",50,50);	
+		super(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP, "frogAlive.png",50,50);
+		
 	}
 	
 	public JLabel getFrogLabel() {
