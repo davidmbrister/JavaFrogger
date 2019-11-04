@@ -63,7 +63,7 @@ public class Log extends Sprite implements Runnable{
 				 Rectangle rFrog = frog.getRectangle();
 				 Rectangle rLog= this.r;
 				 
-				 if ((frog.getSpriteY() > GameProperties.TRACK_FIVE_BASE && frog.getSpriteY() < GameProperties.TRACK_SEVEN_BASE) && rLog.intersects(rFrog) || rFrog.intersects(rLog)) {
+				 if ((frog.getSpriteY() > GameProperties.TRACK_8_BASE && frog.getSpriteY() < GameProperties.TRACK_7_BASE) && rLog.intersects(rFrog) || rFrog.intersects(rLog)) {
 						
 						System.out.println("On it!");
 										
