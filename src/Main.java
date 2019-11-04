@@ -26,6 +26,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 
 	private int spriteIndex;
 	
+	Connection conn = null;
+	Statement stmt = null;
+	
 	private Frog frog;
 	private Car cars[];
 	private Log logs[];
@@ -462,23 +465,19 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 
 	}
 	public void ConnectToDatabase() {
-		Connection conn = null;
-		Statement stmt = null;
+		System.out.println("hey");
 		
 		try {
 			//load the DB driver
 			Class.forName("org.sqlite.JDBC");
-			String dbURL = "jdbc:sqlite:product.db";
+			String dbURL = "jdbc:sqlite:scores.db";
 			conn = DriverManager.getConnection(dbURL);
 			if (conn != null) {
 				System.out.println("Connection established");
 				
 				conn.setAutoCommit(false);
 				DatabaseMetaData dm = (DatabaseMetaData)conn.getMetaData();
-				System.out.println("Driver Name:" + dm.getDriverName());
-				System.out.println("Driver version:" + dm.getDriverVersion());
-				System.out.println("Product Name:" + dm.getDatabaseProductName());
-				System.out.println("Product verison:" + dm.getDatabaseProductVersion());
+				
 				
 				stmt = conn.createStatement();
 				String sql = "";
@@ -487,7 +486,8 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 				//CREATE TABLE IF NOT EXIST
 				sql = "CREATE TABLE IF NOT EXISTS scores ("+ 
 					  "id INTEGER PRIMARY KEY, " +
-					  "name TEXT NOT NULL, " + ")";
+					  "name TEXT NOT NULL, " +
+					  "score INT NOT NULL" + ")";
 				
 				stmt.executeUpdate(sql);
 				conn.commit();
@@ -497,11 +497,12 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 				
 				sql = "INSERT INTO scores (name, score) VALUES ('" +
 				       name + "', " + score + ")";
+				
 				stmt.executeUpdate(sql);
 				conn.commit();
 				
 				//Retrieve
-				sql = "SELECT * FROM company";
+				sql = "SELECT * FROM scores";
 				rs = stmt.executeQuery(sql);
 				System.out.println("The current data is => ");
 				DisplayRecords(rs);
