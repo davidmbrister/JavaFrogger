@@ -53,21 +53,41 @@ public class Frog extends Sprite {
 	
 	
 	public void moveFrog(KeyEvent e) {
-
+		
 		int frogX = this.spriteX;
 		int frogY = this.spriteY;
 		
-		if (this.isFrogAlive() ) {
+		if (this.isFrogAlive() ) { //if frog is dead you can't move it -- this isn't really necessary because frog moves back to start immediately after death
 		
-				if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			
+				if (e.getKeyCode() == KeyEvent.VK_DOWN) { 
+
+					int prevY = this.getSpriteY(); //compare this against next Y to determine if jump is from log to land 
+					System.out.println(this.getSpriteY()+"prevY");//TEST
 					
 					frogY += GameProperties.FROG_STEP;
 					
 					//check if off screen
 					if (frogY > GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP) {
 						frogY -= GameProperties.FROG_STEP;
-						//
+						
 					}
+					
+					this.setSpriteY(frogY);
+					System.out.println(this.getSpriteY()+"nextY");//TEST
+					
+					//TEST TRACK VALUES
+					System.out.println(GameProperties.TRACK_8_BASE+"Track8Base");//TEST
+					System.out.println(GameProperties.TRACK_8_BASE+"Track8Base");//TEST
+					
+					//TODO: code to fix log-to-land jump
+					int nextY = this.getSpriteY();
+					
+					if (nextY > GameProperties.TRACK_8_BASE && prevY == GameProperties.TRACK_8_BASE) {
+						System.out.println("testTESTtest");
+					}
+												
+					//end TODO 
 				
 				} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 					
