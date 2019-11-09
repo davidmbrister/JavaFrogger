@@ -439,8 +439,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 					
 				}
 		} 
-		
-		
+			
 	}
 
 	@Override
@@ -450,7 +449,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) { // place where I can make use of the Main timer object and its 10 ms refresh rate (Timer uses ActionListener interface)
-		
+		//check every 10 ms if the frog is in the water zone and does not have a log-attached value of true
 		if (!frog.isFrogAttached() && frog.getSpriteY() > GameProperties.TRACK_8_BASE && frog.getSpriteY() < GameProperties.TRACK_7_BASE) {
 			//OVERUSED RESET CODE
 			System.out.println("Splash!");
@@ -463,10 +462,10 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			frog.setFrogAlive(true); 
 		}
 
-		gameTimer += 1;
+		gameTimer += 1; //this is used to calculate the length of a second, to be used for things I want to update every second, including the timer label
 		
 		
-		if (gameTimer == 100) {
+		if (gameTimer == 100) { //every 100 cycles is a second - decrement time and time label - reset when == 100
 	
 			time--;
 			timeLabel.setText(String.valueOf(time));
@@ -474,13 +473,12 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			frogLivesLabel.setText(String.valueOf(frogLives));;
 			
 		}
-			
-	    
-		if (frog.getSpriteY() == 0) {
+				    
+		if (frog.getSpriteY() == 0) { //if frog reaches top, stop the timer
 			timer.stop();
 		}
 		
-		if (time == 0 && frogLives > 1) {
+		if (time == 0 && frogLives > 1) { //if timer reaches 0 and frog still has lives, reset frog
 			timer.stop();
 			frogLives--;
 			frog.setFrogAlive(false); 
@@ -494,7 +492,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			timer.restart();
 		}
 		
-		if (time == 0 && frogLives == 1 || frogLives == 0) {
+		if (time == 0 && frogLives == 1 || frogLives == 0) { //if timer reaches 0 and frog only has one life, or if frog has no lives, Game Over condition is satisfied
 			frogLives--;
 			timer.stop();
 			JOptionPane.showMessageDialog(null,"<html><body>Game Over! <br> Your Score is: " + score + "</body></html>");
@@ -566,8 +564,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		}
 
 	}
-	
+	//custom console display of database
 	public static void DisplayRecords(ResultSet rs) throws SQLException {
+		
 		while ( rs.next() ) {
 			int id = rs.getInt("id");
 			String name = rs.getString("name");
