@@ -7,11 +7,16 @@ import javax.swing.JLabel;
 public class Frog extends Sprite {
 
 	private JLabel FrogLabel;
-	private boolean isFrogAlive = true;
+	private boolean isFrogAlive = true; // a frog starts being a frog by being alive...
 	private boolean attached = false; //initially the frog is nowhere close to being attached to a log
 	private Thread t;
 	
+	//CONSTRUCTOR
+	public Frog() {
+		super(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP, "frogAlive.png",50,50);	//starting position
+	}
 	
+	//GETTERS/SETTERS
     public boolean isFrogAttached() {
     	return attached;
     }
@@ -30,10 +35,6 @@ public class Frog extends Sprite {
 
 	public void setFrogAlive(boolean bool) {
 		this.isFrogAlive = bool;
-	}
-
-	public Frog() {
-		super(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP, "frogAlive.png",50,50);	
 	}
 	
 	public JLabel getFrogLabel() {
@@ -92,7 +93,8 @@ public class Frog extends Sprite {
 					}
 					
 				}
-					
+				
+				//could use setFrogCoords as well
 				this.setSpriteX(frogX);				
 				
 				this.setSpriteY(frogY);
@@ -100,6 +102,5 @@ public class Frog extends Sprite {
 				FrogLabel.setLocation(this.spriteX, this.spriteY);
 				
 		}
-	}
-	
+	}	
 }

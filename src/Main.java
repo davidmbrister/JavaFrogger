@@ -25,9 +25,11 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	
 	// A counter for sprite objects 
 	private int spriteIndex;
+	
 	//database variables
 	Connection conn = null;
 	Statement stmt = null;
+	
 	//object variables
 	private Frog frog;
 	private Car cars[];
