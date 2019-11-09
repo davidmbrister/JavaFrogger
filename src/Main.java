@@ -22,23 +22,25 @@ import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener, KeyListener {
-
-	private int spriteIndex;
 	
+	// A counter for sprite objects 
+	private int spriteIndex;
+	//database variables
 	Connection conn = null;
 	Statement stmt = null;
-	
+	//object variables
 	private Frog frog;
 	private Car cars[];
 	private Log logs[];
 	private Timer timer;
 	private String name;
 	
+	//time starts at 20 seconds
 	private int time = 20;
 	private int gameTimer = 0;
 	
 	//image icons to display image icons
-	private ImageIcon frogImage;
+	private ImageIcon frogImage; //player icon
 	
 	private ImageIcon carImage;
 	private ImageIcon roadImage;
@@ -56,6 +58,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	public static int frogLives = 3;
 	public static int level = 1;
 	
+	//Game-based (Main-based) global access to static frog lives 
 	public static int getFrogLives() {
 		return frogLives;
 	}
@@ -64,6 +67,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		frogLives = Lives;
 	}
 
+	//not currently using this enough, but I should try to refactor this so I can apply it wherever the frog needs a reset -- or not...
 	public void restart() {
 		
 		//set location to starting point
@@ -76,14 +80,12 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		//continue refactoring this; maybe lives have to decrease, maybe timer needs reset etc.
 		
 	}
-
 	
 	public Main() {
-		
+		//get a window
 		content = getContentPane();
 			
-		//FROG SETUP
-		
+		//FROG SETUP		
 		frog = new Frog();
 		frogLabel = new JLabel();
 		roadLabel = new JLabel();
@@ -102,19 +104,18 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		
 		restart();//configure frog in starting location
 		
-		
+		//set window props
 		setSize(GameProperties.BOARD_WIDTH, GameProperties.BOARD_HEIGHT_WITH_TOP_BAR);
 		setLayout(null);
-		setResizable(false);
-		
+		setResizable(false);		
 		setLocationRelativeTo(null);
 		content.setBackground(Color.darkGray);
 	
 		//CARS SETUP
-		// for loops to instantiate multiples cars
+		// FOR loops to instantiate multiples cars
 		spriteIndex = 0;
-		int obstacleNum = level;
-		if (obstacleNum == 3) {
+		int obstacleNum = level; //variable determiner of changes between levels - each level has its own JFrame whose objects get created in the Obstacle Rows below
+		if (obstacleNum == 3) { //this makes level three very similar to level 2 (same number of Obstacles, except for a few exceptions determined by If statements below
 			obstacleNum--;
 		}
 		cars = new Car[obstacleNum*7]; 	
@@ -129,9 +130,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			cars[spriteIndex].setFrogLabel(frogLabel);
 			
 			cars[spriteIndex].setSpriteName("orangeCar.png");
-				
-				
-			
+						
 			carImage = new ImageIcon(getClass().getResource(cars[spriteIndex].getSpriteName()) );
 			cars[spriteIndex].setCarLabel(carLabel);
 			carLabel.setIcon(carImage);
@@ -176,7 +175,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			int x  = i * 190;
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_4_BASE - GameProperties.TRACK, 3, "pinkCar.png", 80, 50);
 			if (level == 3) {
-				cars[spriteIndex].setSpeed(6);
+				cars[spriteIndex].setSpeed(6); // increase speed in row 3 for final level 
 			}
 			carLabel = new JLabel();
 			carLabel.setFocusable(false);
@@ -276,7 +275,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			int x  = i * 200 + 30;
 			logs[spriteIndex] = new Log(x, GameProperties.TRACK_9_BASE - GameProperties.TRACK, obstacleNum*2 - 1, "log2.png", 90, 50);
 			if (level == 3) {
-				logs[spriteIndex].setSpeed(2);
+				logs[spriteIndex].setSpeed(2); //slow the logs down in the final row for the last level, possibly making it trickier to reach them from the fast-moving (level 3, row 6 speed=-8) row 6 logs
 			}
 			logLabel = new JLabel();
 			logs[spriteIndex].setFrog(frog);
@@ -305,35 +304,35 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		waterLabel.setSize(600,150);
 		waterLabel.setLocation(0,50);
 		add(waterLabel);
-		
+		//timer label
 		timeLabel = new JLabel("20");
 		timeLabel.setSize(35,35);
 		timeLabel.setLocation(15,15);
 		timeLabel.setFont(new Font("Serif", Font.BOLD, 18));
 		timeLabel.setForeground(Color.white);
 		add(timeLabel);
-		
+		//level label
 		levelLabel = new JLabel("Level " + level);
 		levelLabel.setSize(150,50);
 		levelLabel.setLocation(GameProperties.BOARD_WIDTH/2 - 50, 7);
 		levelLabel.setFont(new Font("Serif", Font.BOLD, 18));
 		levelLabel.setForeground(Color.white);
 		add(levelLabel);
-		
+		//score label
 		scoreLabel = new JLabel("Score: " + score);
 		scoreLabel.setSize(100,50);
 		scoreLabel.setLocation(GameProperties.BOARD_WIDTH - 100, 7);
 		scoreLabel.setFont(new Font("Serif", Font.BOLD, 18));
 		scoreLabel.setForeground(Color.white);
 		add(scoreLabel);
-		
+		//lives header label
 		frogLivesHeaderLabel = new JLabel("Lives Left: ");
 		frogLivesHeaderLabel.setSize(100,50);
 		frogLivesHeaderLabel.setLocation(GameProperties.BOARD_WIDTH - 100, GameProperties.BOARD_HEIGHT - 43);
 		frogLivesHeaderLabel.setFont(new Font("Serif", Font.BOLD, 18));
 		frogLivesHeaderLabel.setForeground(Color.white);
 		add(frogLivesHeaderLabel);
-		
+		//lives label
 		frogLivesLabel = new JLabel(String.valueOf(frogLives));
 		frogLivesLabel.setSize(100,50);
 		frogLivesLabel.setLocation(GameProperties.BOARD_WIDTH - 12, GameProperties.BOARD_HEIGHT - 43);
@@ -341,19 +340,18 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		frogLivesLabel.setForeground(Color.white);
 		add(frogLivesLabel);
 		
-		//TIMER NEEDS ACCESS TO STUFF ABOVE, SO MAKE IT AT THE END OF 'MAIN' CONSTRUCTOR
+		//TIMER NEEDS ACCESS TO SOME STUFF ABOVE, SO INSTANTIATE AND START IT AT THE END OF 'MAIN' CONSTRUCTOR
 		timer = new Timer(10, this);
 		timer.start();
-		
+		//add KeyListener interface to frame
 		content.addKeyListener(this);
 		content.setFocusable(true);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 	
-		
-		
+				
 	}
 	
-	
+	//Application Runner
 	public static void main(String[] args) {
 		Main newGame = new Main();
 		newGame.setVisible(true);
@@ -366,9 +364,10 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-		frog.setFrogAttached(false);//assume this is false 
+		frog.setFrogAttached(false);//assume this is false at first
 	
-		frog.moveFrog(e);
+		frog.moveFrog(e); //call move from Frog class, pass it the KeyEvent
+		
 		System.out.println(frog.getSpriteY());
 		if (frog.getSpriteY() == 0) {
 			totalGameTime += time;//Add current time remaining on clock to totalGameTime, to be used for score and otherwise
@@ -382,11 +381,12 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			Main levelTwoGame = new Main();
 			levelTwoGame.setVisible(true);
 			}
-			
+											//SETTING UP NEW FRAMES FOR LEVELS IS A BAD IDEA, ESPECIALLY IF I WANT TO SCALE TO MORE LEVELS
 			if (level == 3) {
 			Main levelThreeGame = new Main();
 			levelThreeGame.setVisible(true);
 			}
+			
 			//WIN CONDITION MET
 			if (level == 4) {
 				scoreLabel.setVisible(false);
@@ -408,23 +408,22 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			}
 		
 		}
-		int logsIntersected = 0;
+		int logsIntersected = 0; //if to determine if the frog is on a log - if not (logs intersected = 0), reset frog
 		if (frog.getSpriteY() <= GameProperties.TRACK_8_BASE && frog.getSpriteY() >= GameProperties.TRACK_10_BASE){ 
 			 System.out.println("in the blue");	
 			 for (Log log : logs) {
 				 	
 		 		Rectangle rFrog = frog.getRectangle();
 				Rectangle rLog= log.r;
-				System.out.println(frog.isFrogAttached() + "AM I on log");
 		 		if (rFrog.intersects(rLog)){
 		 			System.out.println("I'm on a log");
 		 			frog.setFrogAttached(true);
 		 			
-		 			logsIntersected++;
-	 		
+		 			logsIntersected++;	 		
 		 		}		
 			 } 
 			 if (logsIntersected == 0) {
+				 
 					System.out.println("I'm NOT on a log");
 					frog.setFrogAttached(false);
 					System.out.println(frog.isFrogAttached() + "NOT on log");
@@ -436,7 +435,8 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 					
 					Main.setFrogLives(Main.getFrogLives()-1);
 					System.out.println(Main.getFrogLives());
-					frog.setFrogAlive(true); 
+					frog.setFrogAlive(true);
+					
 				}
 		} 
 		
@@ -449,7 +449,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) { // place where I can make use of the Main timer object and its 10 ms refresh rate (Timer uses ActionListener interface)
 		
 		if (!frog.isFrogAttached() && frog.getSpriteY() > GameProperties.TRACK_8_BASE && frog.getSpriteY() < GameProperties.TRACK_7_BASE) {
 			//OVERUSED RESET CODE
