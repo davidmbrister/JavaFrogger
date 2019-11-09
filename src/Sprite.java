@@ -21,7 +21,7 @@ public class Sprite {
 		this.spriteH = spriteH;
 		r = new Rectangle(spriteX,spriteY,spriteW,spriteH);
 	}
-
+	//GETTERS AND SETTERS
 	public int getSpriteX() {
 		return spriteX;
 	}
@@ -54,7 +54,7 @@ public class Sprite {
 	public void setSpriteH(int spriteH) {
 		this.spriteH = spriteH;
 	}
-	
+	//RECTANGLE GETTER TO BE USED FOR COLLISIONS
 	public Rectangle getRectangle() {
 	return r;	
 	}

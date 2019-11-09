@@ -3,21 +3,18 @@ import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-/* The only thing that makes this different than the Car is it's runnable, i.e. 
- * the way the frog interacts with it, which makes this code a bit redundant.
- * To make it less redundant should I .. extract the Runnable interfaces and use one Object class for 
- * both cars and logs.?????
- *
+/* The only thing that makes this different than the Car is its runnable, i.e. 
+ * the way the frog interacts with it, which makes this code a bit redundant?
  * */
  
 public class Log extends Sprite implements Runnable{
 	//CLASS MEMBERS
-		//variable speed to be determined through constructor because I will have two types of cars
 		private int speed;
 		private Thread thread;
 		private JLabel FrogLabel, LogLabel;
 		private Frog frog;
-		
+	
+	//CONSTRUCTORS
 		public Log() {
 			super(0, 0, "log1.png", 80, 50);
 		}
@@ -30,6 +27,7 @@ public class Log extends Sprite implements Runnable{
 			this.spriteH = h;
 			r = new Rectangle(spriteX,spriteY,spriteW,spriteH);
 		}
+	//GETTERS AND SETTERS
 		public float getSpeed() {
 			return speed;
 		}
@@ -40,7 +38,7 @@ public class Log extends Sprite implements Runnable{
 		public void Display() {
 			System.out.println("X,Y: " + spriteX + ", " + spriteY + "," + "Speed: " + speed);
 		}
-		
+	//make and start thread, call it car
 		public void startLog() {
 			thread = new Thread(this, "Car");
 			thread.start();
@@ -67,23 +65,22 @@ public class Log extends Sprite implements Runnable{
 						
 						System.out.println("On it!");
 						
-						// THIS IS NOT WHAT HAPPENS IN THE ACTUAL GAME
-						System.out.println(frog.isFrogAttached() + " 1PM ");
 						frog.setSpriteX(frog.getSpriteX() + speed);
-						//quickly update frog coords with log coords
+						//add log speed per thread loop to Frog and frog label x coords
 						FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
 						frog.setFrogAttached(true);
 						
-						//if Frog the are intersecting and frog is greater than or less than board with, kick him back within board bounds
+						//if Frog and log are intersecting and frog is greater than or less than board with, kick him back within board bounds
 						if(frog.getSpriteX() < 0) {
+							//if the whole log (to which the frog is attached)has moved off screen, the frog is detached and is pushed into the water
 							if (tX == -this.spriteW + 7) {
+								
 								frog.setFrogAttached(false);	
-								
-								
-								//REFACTOR
+												
+								//REFACTOR THIS
 								System.out.println("Splash!");
 								frog.setFrogAlive(false); 
-								
+								//starting position 
 								frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
 								FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
 								
@@ -91,14 +88,18 @@ public class Log extends Sprite implements Runnable{
 								System.out.println(Main.getFrogLives());
 								
 								frog.setFrogAlive(true); 
+								
 							} else {
+								
 							frog.setSpriteX(0);
 							FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+							
 							}
 						}
+						//if frog x plus its width are greater than board width, then frog is no longer fully on-screen
 						if(frog.getSpriteX() + GameProperties.FROG_STEP > GameProperties.BOARD_WIDTH) {
+								//if log is (almost) fully off-screen, push frog into water
 								if (tX > GameProperties.BOARD_WIDTH - 7) {
-									System.out.println("hey");
 									frog.setFrogAttached(false);	
 									
 									System.out.println("Splash!");
@@ -110,16 +111,19 @@ public class Log extends Sprite implements Runnable{
 									Main.setFrogLives(Main.getFrogLives()-1);
 									System.out.println(Main.getFrogLives());
 									frog.setFrogAlive(true); 
+									
 								} else {
+									
 									System.out.println("offScreenRight");
 								frog.setSpriteX(GameProperties.BOARD_WIDTH - GameProperties.FROG_STEP);
 								FrogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
+								
 								}
 						}
 				 }
 				 
 				 try {
-					   Thread.sleep(20);
+					   Thread.sleep(20); //Thread time
 					 } catch (Exception e) {
 						
 						}
@@ -127,6 +131,7 @@ public class Log extends Sprite implements Runnable{
 			
 		}
 		
+		//SET LABELS AND FROG
 		public void setFrogLabel(JLabel frogLabel) {
 			FrogLabel = frogLabel;
 		}		

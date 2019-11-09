@@ -8,17 +8,19 @@ public class Frog extends Sprite {
 
 	private JLabel FrogLabel;
 	private boolean isFrogAlive = true;
-	private boolean attached = false; //initially the frog is no where close to being attached to a log
+	private boolean attached = false; //initially the frog is nowhere close to being attached to a log
 	private Thread t;
 	
 	
     public boolean isFrogAttached() {
     	return attached;
     }
+    //is the frog on a log
     public void setFrogAttached(boolean attachedOrNot) {
+    	
     	this.attached = attachedOrNot;
     	if(attachedOrNot) {
-    		
+  		
     	}
     }
     
@@ -31,8 +33,7 @@ public class Frog extends Sprite {
 	}
 
 	public Frog() {
-		super(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP, "frogAlive.png",50,50);
-		
+		super(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP, "frogAlive.png",50,50);	
 	}
 	
 	public JLabel getFrogLabel() {
@@ -51,7 +52,7 @@ public class Frog extends Sprite {
 	
 	
 	public void moveFrog(KeyEvent e) {
-		//DoctorLabel.setLocation(0,0);
+
 		int frogX = this.spriteX;
 		int frogY = this.spriteY;
 		
@@ -64,6 +65,7 @@ public class Frog extends Sprite {
 					//check if off screen
 					if (frogY > GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP) {
 						frogY -= GameProperties.FROG_STEP;
+						//
 					}
 				
 				} else if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -71,7 +73,8 @@ public class Frog extends Sprite {
 					frogY -= GameProperties.FROG_STEP;
 					if (frogY < 0 ) {
 						frogY = 0;
-					} //SOME CODE TO TRIGGER WIN CONDITION
+						
+					} 
 					
 				} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					
@@ -87,20 +90,16 @@ public class Frog extends Sprite {
 					if (frogX < 0) {
 						frogX += GameProperties.FROG_STEP;
 					}
+					
 				}
-					//System.out.println(frogX);
-				//this.spriteX = drX;
-				//this.spriteY = drY;
-				this.setSpriteX(frogX);
-				
+					
+				this.setSpriteX(frogX);				
 				
 				this.setSpriteY(frogY);
 				
 				FrogLabel.setLocation(this.spriteX, this.spriteY);
-				//System.out.println(this.getRectangle());
 				
-			}
+		}
 	}
-
 	
 }

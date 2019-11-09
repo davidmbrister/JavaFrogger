@@ -55,7 +55,6 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	public static int score = 0;
 	public static int frogLives = 3;
 	public static int level = 1;
-
 	
 	public static int getFrogLives() {
 		return frogLives;
@@ -64,16 +63,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	public static void setFrogLives(int Lives) {
 		frogLives = Lives;
 	}
-	
-//	public void getNewFrog() {
-//		for(Car car : cars) {
-//		car.setFrog(frog);
-//		}
-//		for (Log log : logs) {
-//		log.setFrog(frog);
-//		}
-//	}
-	
+
 	public void restart() {
 		
 		//set location to starting point
@@ -91,10 +81,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	public Main() {
 		
 		content = getContentPane();
-		
-		
-		
-	
+			
 		//FROG SETUP
 		
 		frog = new Frog();
@@ -295,7 +282,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			logs[spriteIndex].setFrog(frog);
 			logs[spriteIndex].setFrogLabel(frogLabel);
 			logImage = new ImageIcon(getClass().getResource(logs[spriteIndex].getSpriteName()) );
-			logs[spriteIndex].setLogLabel(logLabel);
+			logs[spriteIndex].setLogLabel(logLabel);//sends whole Label by reference to log to be used in a log thread
 			logLabel.setIcon(logImage);
 			logLabel.setSize(logs[spriteIndex].getSpriteW(), logs[spriteIndex].getSpriteH());
 			logLabel.setLocation(logs[spriteIndex].getSpriteX(), logs[spriteIndex].getSpriteY());
@@ -354,7 +341,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		frogLivesLabel.setForeground(Color.white);
 		add(frogLivesLabel);
 		
-		//TIMER NEEDS ACCESS TO EVERYTHING, I THINK
+		//TIMER NEEDS ACCESS TO STUFF ABOVE, SO MAKE IT AT THE END OF 'MAIN' CONSTRUCTOR
 		timer = new Timer(10, this);
 		timer.start();
 		
@@ -384,9 +371,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		frog.moveFrog(e);
 		System.out.println(frog.getSpriteY());
 		if (frog.getSpriteY() == 0) {
-			totalGameTime += time;
-			score = totalGameTime;
-			JOptionPane.showMessageDialog(null, "<html><body>Level complete! <br> Total score so far: " + score + "</body></html>");
+			totalGameTime += time;//Add current time remaining on clock to totalGameTime, to be used for score and otherwise
+			score = totalGameTime; //score and totalGameTime == the same thing but used in different situations
+			JOptionPane.showMessageDialog(null, "<html><body>Level complete! <br> Total score so far: " + score + "</body></html>");//LEVEL WIN CONDITION
 			level++;
 			
 			System.out.println(level); //test
@@ -465,7 +452,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		if (!frog.isFrogAttached() && frog.getSpriteY() > GameProperties.TRACK_8_BASE && frog.getSpriteY() < GameProperties.TRACK_7_BASE) {
-			
+			//OVERUSED RESET CODE
 			System.out.println("Splash!");
 			frog.setFrogAlive(false); 
 			
@@ -514,6 +501,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			name = JOptionPane.showInputDialog("Enter Your Name!");
 			// put name and score in DB, show DB results
 			ConnectToDatabase();
+			System.exit(getDefaultCloseOperation());
 			
 		}
 
@@ -524,7 +512,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		try {
 			//load the DB driver
 			Class.forName("org.sqlite.JDBC");
-			String dbURL = "jdbc:sqlite:scores.db";
+			String dbURL = "jdbc:sqlite:scores.db"; //creates or refers to scores.db database
 			conn = DriverManager.getConnection(dbURL);
 			if (conn != null) {
 				System.out.println("Connection established");
@@ -537,7 +525,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 				String sql = "";
 				ResultSet rs = null;
 				
-				//CREATE TABLE IF NOT EXIST
+				//CREATE TABLE IF NOT EXISTS
 				sql = "CREATE TABLE IF NOT EXISTS scores ("+ 
 					  "id INTEGER PRIMARY KEY, " +
 					  "name TEXT NOT NULL, " +
