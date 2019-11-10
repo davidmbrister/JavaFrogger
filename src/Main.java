@@ -114,13 +114,13 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		content.setBackground(Color.darkGray);
 	
 		//CARS SETUP
-		// FOR loops to instantiate multiples cars
-		spriteIndex = 0;
+		spriteIndex = 0; // a counter which reflects the index of the Car or Log array being processed
 		int obstacleNum = level; //variable determiner of changes between levels - each level has its own JFrame whose objects get created in the Obstacle Rows below
-		if (obstacleNum == 3) { //this makes level three very similar to level 2 (same number of Obstacles, except for a few exceptions determined by If statements below
+		if (obstacleNum == 3) { //this makes level three very similar to level two (same number of Obstacles, except for a few exceptions determined by If statements below
 			obstacleNum--;
 		}
 		cars = new Car[obstacleNum*7]; 	
+		// FOR loops to instantiate multiples cars
 		int spriteChooser = 0;
 		//OBSTACLE ROW 1
 		for(int i = 0; i < obstacleNum*2 - 1; i++) {
@@ -128,7 +128,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			cars[spriteIndex] = new Car(x, GameProperties.TRACK_2_BASE - GameProperties.TRACK, -3, "orangeCar.png", 80, 50);
 			carLabel = new JLabel();
 			carLabel.setFocusable(false);
-			cars[spriteIndex].setFrog(frog);
+ 			cars[spriteIndex].setFrog(frog);
 			cars[spriteIndex].setFrogLabel(frogLabel);
 			
 			cars[spriteIndex].setSpriteName("orangeCar.png");
@@ -196,9 +196,6 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			cars[spriteIndex].startCar();
 			content.add(carLabel);
 			
-			//DEGBUG
-			System.out.println(frog.isFrogAlive()); //prints true...PASS
-			System.out.println(carLabel.getLocation()); //it's the correct coords. PASS
 			spriteIndex++;
 			spriteChooser++;
 		}
@@ -266,7 +263,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			logLabel.setSize(logs[spriteIndex].getSpriteW(), logs[spriteIndex].getSpriteH());
 			logLabel.setLocation(logs[spriteIndex].getSpriteX(), logs[spriteIndex].getSpriteY());
 			logs[spriteIndex].startLog();
-			content.add(logLabel);
+			content.add(logLabel); 
 			
 			spriteIndex++;
 			
@@ -519,8 +516,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 				
 				conn.setAutoCommit(false);
 				DatabaseMetaData dm = (DatabaseMetaData)conn.getMetaData();
-				
-				
+							
 				stmt = conn.createStatement();
 				String sql = "";
 				ResultSet rs = null;
@@ -534,8 +530,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 				stmt.executeUpdate(sql);
 				conn.commit();
 				
-				//insert the current game's data
-				//Insert data
+				//Insert the current game's data
 				
 				sql = "INSERT INTO scores (name, score) VALUES ('" +
 				       name + "', " + score + ")";
