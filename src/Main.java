@@ -13,12 +13,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+
 
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener, KeyListener {
@@ -34,8 +38,10 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	private Frog frog;
 	private Car cars[];
 	private Log logs[];
+	private List<Object> Flies = new ArrayList<Object>();
 	private Timer timer;
 	private String name;
+	private boolean isThereAFly = false;
 	
 	//time starts at 20 seconds
 	private int time = 20;
@@ -48,9 +54,10 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	private ImageIcon roadImage;
 	private ImageIcon waterImage;
 	private ImageIcon logImage;
+	private ImageIcon flyImage;
 	
 	//labels to store image icons
-	private JLabel frogLabel, carLabel, logLabel, roadLabel, waterLabel, timeLabel, levelLabel, scoreLabel, finalScoreLabel, frogLivesLabel, frogLivesHeaderLabel;
+	private JLabel frogLabel, carLabel, logLabel, roadLabel, waterLabel, timeLabel, levelLabel, scoreLabel, finalScoreLabel, frogLivesLabel, frogLivesHeaderLabel, flyLabel;
 	//screen container
 	private Container content;
 	
@@ -69,6 +76,13 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		frogLives = Lives;
 	}
 
+	public boolean isThereAFly() {
+		return isThereAFly;
+	}
+	
+	public void setIsThereAFly(boolean isThereAFly) {
+		this.isThereAFly = isThereAFly;
+	}
 	//not currently using this enough, but I should try to refactor this so I can apply it wherever the frog needs a reset -- or not...
 	public void restart() {
 		
@@ -367,6 +381,22 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	
 		frog.moveFrog(e); //call move from Frog class, pass it the KeyEvent
 		
+		Rectangle flyFrogRect = frog.getRectangle();
+		if(isThereAFly()) {
+			Sprite Fly = (Sprite)Flies.get(0); 
+			Rectangle frogFlyRect = Fly.getRectangle();
+			System.out.println(frogFlyRect.x);
+			if (flyFrogRect.intersects(frogFlyRect)){
+	 			System.out.println("I caught a fly");
+	 			setIsThereAFly(false);
+	 			Flies.remove(0);
+	 			score +=10; //increase score
+	 			scoreLabel.repaint();
+	 			flyLabel.repaint(); //repaint so the fly is gone 			 		
+	 		}		
+		}
+		
+		
 		System.out.println(frog.getSpriteY());
 		if (frog.getSpriteY() == 0) {
 			totalGameTime += time;//Add current time remaining on clock to totalGameTime, to be used for score and otherwise
@@ -407,6 +437,42 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			}
 		
 		}
+		
+		// IF FROG IS AT FROGSTEP Y and there is no fly 	
+		if (frog.getSpriteY() == GameProperties.FROG_STEP && !isThereAFly) {
+			Flies.add(new Sprite());
+			Sprite myFly = (Sprite)Flies.get(0);
+			flyLabel = new JLabel("newFly");
+			myFly.setSpriteName("fly.png");
+			flyImage = new ImageIcon(getClass().getResource(myFly.getSpriteName()) );
+			myFly.setSpriteLabel(flyLabel);
+			flyLabel.setIcon(flyImage);
+			
+			//set size
+			flyLabel.setSize(50,50);
+			
+			//set random location beneath river
+			int randInt1 = ThreadLocalRandom.current().nextInt(0, 550 + 1);
+			int randInt2 = ThreadLocalRandom.current().nextInt(200, 450 + 1);
+			System.out.println(randInt1 + " " + randInt2 + " " + "random coords");
+			flyLabel.setLocation(randInt1,randInt2);
+			myFly.setSpriteX(randInt1);
+			myFly.setSpriteY(randInt2);
+			myFly.Display();
+			
+			//add(flyLabel)			
+			flyLabel.repaint();
+			add(flyLabel);
+			flyLabel.setVisible(true);
+			setIsThereAFly(true);
+		}
+		
+		
+		
+		
+		
+		
+		
 		int logsIntersected = 0; //if to determine if the frog is on a log - if not (logs intersected = 0), reset frog
 		if (frog.getSpriteY() <= GameProperties.TRACK_8_BASE && frog.getSpriteY() >= GameProperties.TRACK_10_BASE){ 
 			 System.out.println("in the blue");	
@@ -440,6 +506,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		} 
 			
 	}
+
 
 	@Override
 	public void keyReleased(KeyEvent e) {

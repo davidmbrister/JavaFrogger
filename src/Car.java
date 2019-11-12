@@ -49,6 +49,8 @@ public class Car extends Sprite implements Runnable {
 			
 			//stop the car's thread if the frog has no lives
 			while(Main.getFrogLives() > 0) { 
+				
+				CarLabel.repaint();
 							
 				int tX = this.spriteX; // store a copy of value of current this.car X val
 				

@@ -1,11 +1,14 @@
 import java.awt.Rectangle;
 
+import javax.swing.JLabel;
+
 public class Sprite {
 		//data members 
 		protected int spriteX, spriteY;
 		protected String spriteName;
 		protected int spriteW, spriteH;
 		protected Rectangle r;
+		protected JLabel spriteLabel; //for Fly if I don't want to make a fly class
 		//CONSTRUCTORS
 		public Sprite() {
 			super();
@@ -53,6 +56,11 @@ public class Sprite {
 		}
 		public void setSpriteH(int spriteH) {
 			this.spriteH = spriteH;
+		}
+		
+		//TENTAIVE SET SPRITE LABEL FOR FLY EXPERIMENT
+		public void setSpriteLabel(JLabel spriteLabel) {
+			this.spriteLabel = spriteLabel;
 		}
 		//RECTANGLE GETTER TO BE USED FOR COLLISIONS
 		public Rectangle getRectangle() {
