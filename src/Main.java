@@ -38,6 +38,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	private Frog frog;
 	private Car cars[];
 	private Log logs[];
+	private Sprite myFly;
 	private List<Object> Flies = new ArrayList<Object>();
 	private Timer timer;
 	private String name;
@@ -100,6 +101,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	public Main() {
 		//get a window
 		content = getContentPane();
+		
+		//add a layered pane and re-add everything to them
+		
 			
 		//FROG SETUP		
 		frog = new Frog();
@@ -381,18 +385,20 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	
 		frog.moveFrog(e); //call move from Frog class, pass it the KeyEvent
 		
-		Rectangle flyFrogRect = frog.getRectangle();
 		if(isThereAFly()) {
-			Sprite Fly = (Sprite)Flies.get(0); 
-			Rectangle frogFlyRect = Fly.getRectangle();
-			System.out.println(frogFlyRect.x);
-			if (flyFrogRect.intersects(frogFlyRect)){
+			//Sprite Fly = (Sprite)Flies.get(0); 
+			Rectangle flyFrogRect = frog.getRectangle();
+			Rectangle frogFlyRect = myFly.getRectangle();
+			
+			if (flyFrogRect.contains((int)frogFlyRect.getCenterX(), (int)frogFlyRect.getCenterY())){  
 	 			System.out.println("I caught a fly");
 	 			setIsThereAFly(false);
 	 			Flies.remove(0);
 	 			score +=10; //increase score
-	 			scoreLabel.repaint();
-	 			flyLabel.repaint(); //repaint so the fly is gone 			 		
+	 			System.out.println(score);
+	 			flyLabel.setIcon(null);
+	 			flyLabel.repaint(); //repaint so the fly is gone  		
+	 			
 	 		}		
 		}
 		
@@ -400,7 +406,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		System.out.println(frog.getSpriteY());
 		if (frog.getSpriteY() == 0) {
 			totalGameTime += time;//Add current time remaining on clock to totalGameTime, to be used for score and otherwise
-			score = totalGameTime; //score and totalGameTime == the same thing but used in different situations
+			score += totalGameTime; //score and totalGameTime == the same thing but used in different situations
 			JOptionPane.showMessageDialog(null, "<html><body>Level complete! <br> Total score so far: " + score + "</body></html>");//LEVEL WIN CONDITION
 			level++;
 			
@@ -441,8 +447,8 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		// IF FROG IS AT FROGSTEP Y and there is no fly 	
 		if (frog.getSpriteY() == GameProperties.FROG_STEP && !isThereAFly) {
 			Flies.add(new Sprite());
-			Sprite myFly = (Sprite)Flies.get(0);
-			flyLabel = new JLabel("newFly");
+			myFly = (Sprite)Flies.get(0);
+			flyLabel = new JLabel();
 			myFly.setSpriteName("fly.png");
 			flyImage = new ImageIcon(getClass().getResource(myFly.getSpriteName()) );
 			myFly.setSpriteLabel(flyLabel);
@@ -453,7 +459,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			
 			//set random location beneath river
 			int randInt1 = ThreadLocalRandom.current().nextInt(0, 550 + 1);
-			int randInt2 = ThreadLocalRandom.current().nextInt(200, 450 + 1);
+			int randInt2 = ThreadLocalRandom.current().nextInt(250, 400 + 1);
 			System.out.println(randInt1 + " " + randInt2 + " " + "random coords");
 			flyLabel.setLocation(randInt1,randInt2);
 			myFly.setSpriteX(randInt1);
@@ -461,18 +467,11 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			myFly.Display();
 			
 			//add(flyLabel)			
-			flyLabel.repaint();
-			add(flyLabel);
+			add(flyLabel,6);
 			flyLabel.setVisible(true);
 			setIsThereAFly(true);
 		}
-		
-		
-		
-		
-		
-		
-		
+			
 		int logsIntersected = 0; //if to determine if the frog is on a log - if not (logs intersected = 0), reset frog
 		if (frog.getSpriteY() <= GameProperties.TRACK_8_BASE && frog.getSpriteY() >= GameProperties.TRACK_10_BASE){ 
 			 System.out.println("in the blue");	
@@ -535,6 +534,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 	
 			time--;
 			timeLabel.setText(String.valueOf(time));
+			scoreLabel.setText("Score: " + String.valueOf(score));
 			gameTimer = 0;
 			frogLivesLabel.setText(String.valueOf(frogLives));;
 			
@@ -561,6 +561,7 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 		if (time == 0 && frogLives == 1 || frogLives == 0) { //if timer reaches 0 and frog only has one life, or if frog has no lives, Game Over condition is satisfied
 			frogLives--;
 			timer.stop();
+			score += time;
 			JOptionPane.showMessageDialog(null,"<html><body>Game Over! <br> Your Score is: " + score + "</body></html>");
 			name = JOptionPane.showInputDialog("Enter Your Name!");
 			// put name and score in DB, show DB results
