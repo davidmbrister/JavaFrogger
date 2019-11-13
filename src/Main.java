@@ -390,8 +390,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			Rectangle flyFrogRect = frog.getRectangle();
 			Rectangle frogFlyRect = myFly.getRectangle();
 			
-			if (flyFrogRect.contains((int)frogFlyRect.getCenterX(), (int)frogFlyRect.getCenterY())){  
-	 			System.out.println("I caught a fly");
+			if (flyFrogRect.contains((int)frogFlyRect.getCenterX(), (int)frogFlyRect.getCenterY())){			
+	 			
+				System.out.println("I caught a fly");
 	 			setIsThereAFly(false);
 	 			Flies.remove(0);
 	 			score +=10; //increase score
@@ -551,17 +552,15 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			
 			frog.setFrogCoords(GameProperties.BOARD_WIDTH/2,GameProperties.BOARD_HEIGHT - GameProperties.FROG_STEP);
 			frogLabel.setLocation(frog.getSpriteX(), frog.getSpriteY());
-			Main.setFrogLives(Main.getFrogLives()-1);
 			System.out.println(Main.getFrogLives());
 			frog.setFrogAlive(true); 
 			time = 20;
 			timer.restart();
-		}
+		}   
 		
-		if (time == 0 && frogLives == 1 || frogLives == 0) { //if timer reaches 0 and frog only has one life, or if frog has no lives, Game Over condition is satisfied
+		if (time == 0 && frogLives == 0 || frogLives == 0) { //if timer reaches 0 and frog only has one life, or if frog has no lives, Game Over condition is satisfied
 			frogLives--;
 			timer.stop();
-			score += time;
 			JOptionPane.showMessageDialog(null,"<html><body>Game Over! <br> Your Score is: " + score + "</body></html>");
 			name = JOptionPane.showInputDialog("Enter Your Name!");
 			// put name and score in DB, show DB results
