@@ -390,9 +390,9 @@ public class Main extends JFrame implements ActionListener, KeyListener {
 			Rectangle flyFrogRect = frog.getRectangle();
 			Rectangle frogFlyRect = myFly.getRectangle();
 			
-			if (flyFrogRect.contains((int)frogFlyRect.getCenterX(), (int)frogFlyRect.getCenterY())){			
+			if (flyFrogRect.contains((int)frogFlyRect.getCenterX()+25, (int)frogFlyRect.getCenterY()+25)){			
 	 			
-				System.out.println("I caught a fly");
+				System.out.println("I caught a fly"); 
 	 			setIsThereAFly(false);
 	 			Flies.remove(0);
 	 			score +=10; //increase score
