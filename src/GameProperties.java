@@ -5,7 +5,7 @@ final public static int BOARD_HEIGHT_WITH_TOP_BAR = 8*FROG_STEP + 20; //470, cur
 final public static int BOARD_HEIGHT = 8*FROG_STEP;
 final public static int BOARD_WIDTH = 500;
 
-//there will be 8 track, incidentally currently the same as STEP
+//there will be 8 tracks, incidentally currently of the same size as STEP
 final public static int TRACK = BOARD_HEIGHT/8;
 
 //implement Track constants -- this constitutes my layout of one column and 8 rows
