@@ -1,6 +1,6 @@
 
 public class GameProperties {
-	final public static int FROG_STEP = 50; //equivalent to dimension of frog square
+final public static int FROG_STEP = 50; //equivalent to dimension of frog square
 final public static int BOARD_HEIGHT_WITH_TOP_BAR = 8*FROG_STEP + 20; //470, currently
 final public static int BOARD_HEIGHT = 8*FROG_STEP;
 final public static int BOARD_WIDTH = 500;
