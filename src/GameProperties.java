@@ -18,6 +18,4 @@ final public static int TRACK_FOUR_HEIGHT = (BOARD_HEIGHT/8)*5;
 final public static int TRACK_THREE_HEIGHT = (BOARD_HEIGHT/8)*6;
 final public static int TRACK_TWO_HEIGHT = (BOARD_HEIGHT/8)*7;
 final public static int TRACK_ONE_HEIGHT = (BOARD_HEIGHT/8)*8;
-
-
 }
